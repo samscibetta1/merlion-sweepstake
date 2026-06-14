@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b3d2e" />
+  <title>World Cup 2026 - Merlion Sweepstake</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-ball">⚽</span>
+        <div>
+          <h1 id="tournamentTitle">World Cup 2026 - Merlion Sweepstake</h1>
+          <p class="brand-sub">Live updates for the crew</p>
+        </div>
+      </div>
+      <button id="adminToggle" class="ghost-btn" type="button">Admin</button>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-view="scoreboard" type="button">Live Updates</button>
+      <button class="tab" data-view="roster" type="button">Rankings</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- SCOREBOARD -->
+    <section id="scoreboard" class="view active">
+      <div id="liveEmpty" class="empty hidden">No matches yet. Add one in the Admin panel.</div>
+      <div id="matchList" class="match-list"></div>
+    </section>
+
+    <!-- ROSTER -->
+    <section id="roster" class="view">
+      <div id="rosterEmpty" class="empty hidden">No one's drafted teams yet.</div>
+      <div id="rosterList" class="roster-list"></div>
+    </section>
+
+  </main>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminBackdrop" class="backdrop hidden"></div>
+  <aside id="adminPanel" class="admin-panel hidden" aria-label="Admin panel">
+    <div class="admin-head">
+      <h2>Admin</h2>
+      <button id="adminClose" class="icon-btn" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <div class="admin-body">
+      <details class="admin-group" open>
+        <summary>Tournament name</summary>
+        <div class="admin-content">
+          <input id="adminTournament" class="field" type="text" placeholder="World Cup 2026" />
+        </div>
+      </details>
+
+      <details class="admin-group">
+        <summary>People &amp; their teams</summary>
+        <div class="admin-content">
+          <div class="row">
+            <input id="newPersonName" class="field" type="text" placeholder="Friend's name" />
+            <button id="addPerson" class="primary-btn small" type="button">Add</button>
+          </div>
+          <div id="adminPeople" class="admin-people"></div>
+        </div>
+      </details>
+
+      <details class="admin-group">
+        <summary>Matches</summary>
+        <div class="admin-content">
+          <div class="match-form">
+            <input id="mTeamA" class="field" type="text" list="teamOptions" placeholder="Home team" />
+            <input id="mTeamB" class="field" type="text" list="teamOptions" placeholder="Away team" />
+            <button id="addMatch" class="primary-btn small" type="button">Add match</button>
+          </div>
+          <div id="adminMatches" class="admin-matches"></div>
+        </div>
+      </details>
+
+      <details class="admin-group">
+        <summary>Post an update</summary>
+        <div class="admin-content">
+          <div class="row">
+            <input id="feedText" class="field" type="text" placeholder="GOAL! Argentina 1–0 (23')" />
+            <button id="addFeed" class="primary-btn small" type="button">Post</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="admin-group">
+        <summary>Backup &amp; sharing</summary>
+        <div class="admin-content">
+          <p class="hint">Export saves everything to a file. Import loads it back. Use this to move data between devices.</p>
+          <div class="row">
+            <button id="exportData" class="ghost-btn small" type="button">Export</button>
+            <button id="importData" class="ghost-btn small" type="button">Import</button>
+            <input id="importFile" type="file" accept="application/json" hidden />
+          </div>
+          <button id="resetData" class="danger-btn small" type="button">Reset everything</button>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <datalist id="teamOptions"></datalist>
+
+  <footer class="footer">
+    <span id="lastUpdated">Updated just now</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
