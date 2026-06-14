@@ -6,7 +6,7 @@
     { "id": "p03", "name": "Polly", "teams": ["Scotland", "Uzbekistan", "Iraq"] },
     { "id": "p04", "name": "Sofia", "teams": ["Colombia", "Croatia", "Tunisia"] },
     { "id": "p05", "name": "Elsa", "teams": ["Brazil", "Australia", "Saudi Arabia"] },
-    { "id": "p06", "name": "Lindsey", "teams": ["Netherlands", "Qatar", "Ivory Coast"] },
+    { "id": "p06", "name": "Lindsay", "teams": ["Netherlands", "Qatar", "Ivory Coast"] },
     { "id": "p07", "name": "Andras", "teams": ["Algeria", "Mexico", "Cape Verde", "Uruguay", "Spain"] },
     { "id": "p08", "name": "Supi", "teams": ["Argentina", "Austria", "Senegal"] },
     { "id": "p09", "name": "Vincent", "teams": ["Norway"] },

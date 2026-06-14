@@ -20,7 +20,7 @@ const SEED_PEOPLE = [
   { name: "Polly", teams: ["Scotland", "Uzbekistan", "Iraq"] },
   { name: "Sofia", teams: ["Colombia", "Croatia", "Tunisia"] },
   { name: "Elsa", teams: ["Brazil", "Australia", "Saudi Arabia"] },
-  { name: "Lindsey", teams: ["Netherlands", "Qatar", "Ivory Coast"] },
+  { name: "Lindsay", teams: ["Netherlands", "Qatar", "Ivory Coast"] },
   { name: "Andras", teams: ["Algeria", "Mexico", "Cape Verde", "Uruguay", "Spain"] },
   { name: "Supi", teams: ["Argentina", "Austria", "Senegal"] },
   { name: "Vincent", teams: ["Norway"] },
