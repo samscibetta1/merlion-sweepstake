@@ -230,21 +230,24 @@ html, body {
   border-radius: 8px;
 }
 .person-name { font-size: 16px; font-weight: 700; margin: 0; overflow: hidden; text-overflow: ellipsis; }
-.total-wins { display: flex; align-items: baseline; gap: 6px; flex-shrink: 0; }
-.total-wins-num {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
-  color: var(--gold);
-}
-.total-wins-label {
-  font-size: 11px;
+.total-record { display: flex; align-items: baseline; gap: 10px; flex-shrink: 0; }
+.tr-stat {
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
+.tr-stat b {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-right: 1px;
+}
+.tr-w b { color: var(--green); }
+.tr-t b { color: var(--text); }
+.tr-l b { color: var(--red); }
 .team-records { display: flex; flex-direction: column; gap: 2px; }
 .team-row {
   display: flex;

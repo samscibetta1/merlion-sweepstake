@@ -420,9 +420,10 @@ function renderRoster() {
             <span class="rank">${i + 1}</span>
             <span class="person-name">${esc(s.person.name)}</span>
           </div>
-          <div class="total-wins">
-            <span class="total-wins-num">${s.total.w}</span>
-            <span class="total-wins-label">${s.total.w === 1 ? "win" : "wins"}</span>
+          <div class="total-record">
+            <span class="tr-stat tr-w"><b>${s.total.w}</b>W</span>
+            <span class="tr-stat tr-t"><b>${s.total.t}</b>T</span>
+            <span class="tr-stat tr-l"><b>${s.total.l}</b>L</span>
           </div>
         </div>
         <div class="team-records">${rows}</div>
