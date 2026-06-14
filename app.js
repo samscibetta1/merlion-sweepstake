@@ -124,6 +124,7 @@ function defaultState() {
     people: SEED_PEOPLE.map((p) => ({ id: uid(), name: p.name, teams: [...p.teams] })),
     matches: seedMatches(),
     feed: [],
+    trashTalk: [],
     updatedAt: Date.now(),
   };
 }
@@ -169,10 +170,43 @@ function load() {
 function save() {
   state.updatedAt = Date.now();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (fbRef && !applyingRemote) fbRef.set(state);
   render();
 }
 
 let state = load();
+
+// ----- Firebase live sync (optional; off until firebase-config.js is filled in) -----
+let fbRef = null;
+let applyingRemote = false;
+
+function initSync() {
+  const cfg = window.FIREBASE_CONFIG;
+  if (!cfg || !cfg.apiKey || typeof firebase === "undefined") return;
+  try {
+    firebase.initializeApp(cfg);
+    fbRef = firebase.database().ref("sweepstake");
+    fbRef.on("value", (snap) => {
+      const remote = snap.val();
+      if (!remote) {
+        // Database is empty → seed it from this device's current data.
+        fbRef.set(state);
+        return;
+      }
+      applyingRemote = true;
+      state = Object.assign(defaultState(), remote);
+      if (!state.trashTalk) state.trashTalk = [];
+      if (!state.feed) state.feed = [];
+      assignKickoffTimes(state.matches);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      render();
+      if (!document.getElementById("adminPanel").classList.contains("hidden")) renderAdmin();
+      applyingRemote = false;
+    });
+  } catch (e) {
+    console.warn("Firebase sync unavailable:", e);
+  }
+}
 
 // ----- Helpers -----
 function ownerOf(teamName) {
@@ -232,6 +266,7 @@ function render() {
   renderMatches();
   renderRoster();
   renderFeed();
+  renderTrashTalk();
   document.getElementById("lastUpdated").textContent = "Updated " + timeAgo(state.updatedAt);
 }
 
@@ -404,6 +439,22 @@ function renderFeed() {
     <li class="feed-item">
       <div class="feed-time">${clockTime(f.time)}</div>
       <div class="feed-text">${esc(f.text)}</div>
+    </li>`).join("");
+}
+
+function renderTrashTalk() {
+  const list = document.getElementById("talkList");
+  const empty = document.getElementById("talkEmpty");
+  if (!list || !empty) return;
+  const msgs = state.trashTalk || [];
+  empty.classList.toggle("hidden", msgs.length > 0);
+  list.innerHTML = [...msgs].reverse().map((t) => `
+    <li class="talk-item">
+      <div class="talk-head">
+        <span class="talk-author">${esc(t.name || "Anonymous")}</span>
+        <span class="talk-time">${timeAgo(t.time)}</span>
+      </div>
+      <div class="talk-body">${esc(t.text)}</div>
     </li>`).join("");
 }
 
@@ -619,6 +670,27 @@ document.getElementById("feedText").addEventListener("keydown", (e) => {
   if (e.key === "Enter") postFeed();
 });
 
+// ----- Trash Talk (open to all users) -----
+const TALK_NAME_KEY = "wc-trash-talk-name";
+function postTrashTalk() {
+  const nameInput = document.getElementById("talkName");
+  const textInput = document.getElementById("talkText");
+  const name = nameInput.value.trim();
+  const text = textInput.value.trim();
+  if (!text) return;
+  if (name) localStorage.setItem(TALK_NAME_KEY, name);
+  if (!state.trashTalk) state.trashTalk = [];
+  state.trashTalk.push({ id: uid(), time: Date.now(), name: name || "Anonymous", text });
+  textInput.value = "";
+  save();
+}
+document.getElementById("talkPost").addEventListener("click", postTrashTalk);
+document.getElementById("talkText").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") postTrashTalk();
+});
+const savedTalkName = localStorage.getItem(TALK_NAME_KEY);
+if (savedTalkName) document.getElementById("talkName").value = savedTalkName;
+
 // ----- Admin: backup -----
 document.getElementById("exportData").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -665,3 +737,4 @@ setInterval(() => {
 }, 30000);
 
 render();
+initSync();

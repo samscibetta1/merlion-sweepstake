@@ -25,6 +25,7 @@
     <nav class="tabs">
       <button class="tab active" data-view="scoreboard" type="button">Live Updates</button>
       <button class="tab" data-view="roster" type="button">Rankings</button>
+      <button class="tab" data-view="trashtalk" type="button">Trash Talk</button>
     </nav>
   </header>
 
@@ -39,6 +40,19 @@
     <section id="roster" class="view">
       <div id="rosterEmpty" class="empty hidden">No one's drafted teams yet.</div>
       <div id="rosterList" class="roster-list"></div>
+    </section>
+
+    <!-- TRASH TALK -->
+    <section id="trashtalk" class="view">
+      <div class="talk-compose">
+        <input id="talkName" class="field" type="text" maxlength="24" placeholder="Your name" />
+        <div class="talk-compose-row">
+          <input id="talkText" class="field" type="text" maxlength="280" placeholder="Talk your trash…" />
+          <button id="talkPost" class="primary-btn small" type="button">Post</button>
+        </div>
+      </div>
+      <div id="talkEmpty" class="empty hidden">No trash talk yet. Be the first to start something.</div>
+      <ul id="talkList" class="talk-list"></ul>
     </section>
 
   </main>
@@ -113,6 +127,9 @@
     <span id="lastUpdated">Updated just now</span>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
