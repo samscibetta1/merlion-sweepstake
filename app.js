@@ -21,7 +21,7 @@ const SEED_PEOPLE = [
   { name: "Sofia", teams: ["Colombia", "Croatia", "Tunisia"] },
   { name: "Elsa", teams: ["Brazil", "Australia", "Saudi Arabia"] },
   { name: "Lindsay", teams: ["Netherlands", "Qatar", "Ivory Coast"] },
-  { name: "Andras", teams: ["Algeria", "Mexico", "Cape Verde", "Uruguay", "Spain"] },
+  { name: "Andras", teams: ["Algeria", "Mexico", "Cape Verde", "Spain"] },
   { name: "Supi", teams: ["Argentina", "Austria", "Senegal"] },
   { name: "Vincent", teams: ["Norway"] },
   { name: "Lisha", teams: ["South Korea", "Paraguay", "Panama"] },
@@ -33,6 +33,7 @@ const SEED_PEOPLE = [
   { name: "Ted", teams: ["Portugal", "Jordan"] },
   { name: "Sam", teams: ["USA", "Czech Republic", "Curacao"] },
   { name: "Meilin", teams: ["Japan", "Haiti", "Sweden"] },
+  { name: "Andor", teams: ["Uruguay"] },
 ];
 
 // [group, teamA, teamB, date, status, scoreA, scoreB, time]
@@ -62,13 +63,13 @@ const SEED_MATCHES = [
   ["D", "Turkey", "Paraguay", "2026-06-20", "scheduled", 0, 0, "12:00"],
   ["D", "Turkey", "USA", "2026-06-26", "scheduled", 0, 0, "10:00"],
   ["D", "Paraguay", "Australia", "2026-06-26", "scheduled", 0, 0, "10:00"],
-  ["E", "Germany", "Curacao", "2026-06-15", "scheduled", 0, 0, "01:00"],
-  ["E", "Ivory Coast", "Ecuador", "2026-06-15", "scheduled", 0, 0, "07:00"],
+  ["E", "Germany", "Curacao", "2026-06-15", "final", 7, 1, "01:00"],
+  ["E", "Ivory Coast", "Ecuador", "2026-06-15", "final", 1, 0, "07:00"],
   ["E", "Germany", "Ivory Coast", "2026-06-21", "scheduled", 0, 0, "04:00"],
   ["E", "Ecuador", "Curacao", "2026-06-21", "scheduled", 0, 0, "08:00"],
   ["E", "Curacao", "Ivory Coast", "2026-06-26", "scheduled", 0, 0, "04:00"],
   ["E", "Ecuador", "Germany", "2026-06-26", "scheduled", 0, 0, "04:00"],
-  ["F", "Netherlands", "Japan", "2026-06-15", "scheduled", 0, 0, "04:00"],
+  ["F", "Netherlands", "Japan", "2026-06-15", "final", 2, 2, "04:00"],
   ["F", "Sweden", "Tunisia", "2026-06-15", "scheduled", 0, 0, "10:00"],
   ["F", "Netherlands", "Sweden", "2026-06-21", "scheduled", 0, 0, "01:00"],
   ["F", "Tunisia", "Japan", "2026-06-21", "scheduled", 0, 0, "12:00"],
