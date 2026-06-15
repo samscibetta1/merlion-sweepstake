@@ -7,7 +7,7 @@
     { "id": "p04", "name": "Sofia", "teams": ["Colombia", "Croatia", "Tunisia"] },
     { "id": "p05", "name": "Elsa", "teams": ["Brazil", "Australia", "Saudi Arabia"] },
     { "id": "p06", "name": "Lindsay", "teams": ["Netherlands", "Qatar", "Ivory Coast"] },
-    { "id": "p07", "name": "Andras", "teams": ["Algeria", "Mexico", "Cape Verde", "Spain"] },
+    { "id": "p07", "name": "Andras", "teams": ["Algeria", "Mexico", "Cape Verde"] },
     { "id": "p08", "name": "Supi", "teams": ["Argentina", "Austria", "Senegal"] },
     { "id": "p09", "name": "Vincent", "teams": ["Norway"] },
     { "id": "p10", "name": "Lisha", "teams": ["South Korea", "Paraguay", "Panama"] },
@@ -19,7 +19,8 @@
     { "id": "p16", "name": "Ted", "teams": ["Portugal", "Jordan"] },
     { "id": "p17", "name": "Sam", "teams": ["USA", "Czech Republic", "Curacao"] },
     { "id": "p18", "name": "Meilin", "teams": ["Japan", "Haiti", "Sweden"] },
-    { "id": "p19", "name": "Andor", "teams": ["Uruguay"] }
+    { "id": "p19", "name": "Andor", "teams": ["Uruguay"] },
+    { "id": "p20", "name": "Alvin", "teams": ["Spain"] }
   ],
   "matches": [
     { "id": "mA1", "group": "A", "teamA": "Mexico", "teamB": "South Africa", "date": "2026-06-12", "status": "final", "scoreA": 2, "scoreB": 0, "time": "03:00", "minute": "" },

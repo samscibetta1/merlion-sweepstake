@@ -21,7 +21,7 @@ const SEED_PEOPLE = [
   { name: "Sofia", teams: ["Colombia", "Croatia", "Tunisia"] },
   { name: "Elsa", teams: ["Brazil", "Australia", "Saudi Arabia"] },
   { name: "Lindsay", teams: ["Netherlands", "Qatar", "Ivory Coast"] },
-  { name: "Andras", teams: ["Algeria", "Mexico", "Cape Verde", "Spain"] },
+  { name: "Andras", teams: ["Algeria", "Mexico", "Cape Verde"] },
   { name: "Supi", teams: ["Argentina", "Austria", "Senegal"] },
   { name: "Vincent", teams: ["Norway"] },
   { name: "Lisha", teams: ["South Korea", "Paraguay", "Panama"] },
@@ -34,6 +34,7 @@ const SEED_PEOPLE = [
   { name: "Sam", teams: ["USA", "Czech Republic", "Curacao"] },
   { name: "Meilin", teams: ["Japan", "Haiti", "Sweden"] },
   { name: "Andor", teams: ["Uruguay"] },
+  { name: "Alvin", teams: ["Spain"] },
 ];
 
 // [group, teamA, teamB, date, status, scoreA, scoreB, time]
