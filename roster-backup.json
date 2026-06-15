@@ -54,7 +54,7 @@
     { "id": "mE5", "group": "E", "teamA": "Curacao", "teamB": "Ivory Coast", "date": "2026-06-26", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "04:00", "minute": "" },
     { "id": "mE6", "group": "E", "teamA": "Ecuador", "teamB": "Germany", "date": "2026-06-26", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "04:00", "minute": "" },
     { "id": "mF1", "group": "F", "teamA": "Netherlands", "teamB": "Japan", "date": "2026-06-15", "status": "final", "scoreA": 2, "scoreB": 2, "time": "04:00", "minute": "" },
-    { "id": "mF2", "group": "F", "teamA": "Sweden", "teamB": "Tunisia", "date": "2026-06-15", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
+    { "id": "mF2", "group": "F", "teamA": "Sweden", "teamB": "Tunisia", "date": "2026-06-15", "status": "final", "scoreA": 5, "scoreB": 1, "time": "10:00", "minute": "" },
     { "id": "mF3", "group": "F", "teamA": "Netherlands", "teamB": "Sweden", "date": "2026-06-21", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "01:00", "minute": "" },
     { "id": "mF4", "group": "F", "teamA": "Tunisia", "teamB": "Japan", "date": "2026-06-21", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "12:00", "minute": "" },
     { "id": "mF5", "group": "F", "teamA": "Japan", "teamB": "Sweden", "date": "2026-06-26", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:00", "minute": "" },
