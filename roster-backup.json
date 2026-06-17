@@ -89,7 +89,7 @@
     { "id": "mK4", "group": "K", "teamA": "Colombia", "teamB": "Congo", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mK5", "group": "K", "teamA": "Colombia", "teamB": "Portugal", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:30", "minute": "" },
     { "id": "mK6", "group": "K", "teamA": "Congo", "teamB": "Uzbekistan", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:30", "minute": "" },
-    { "id": "mL1", "group": "L", "teamA": "England", "teamB": "Croatia", "date": "2026-06-18", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "04:00", "minute": "" },
+    { "id": "mL1", "group": "L", "teamA": "England", "teamB": "Croatia", "date": "2026-06-18", "status": "final", "scoreA": 4, "scoreB": 2, "time": "04:00", "minute": "" },
     { "id": "mL2", "group": "L", "teamA": "Ghana", "teamB": "Panama", "date": "2026-06-18", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:00", "minute": "" },
     { "id": "mL3", "group": "L", "teamA": "England", "teamB": "Ghana", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "04:00", "minute": "" },
     { "id": "mL4", "group": "L", "teamA": "Panama", "teamB": "Croatia", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:00", "minute": "" },
