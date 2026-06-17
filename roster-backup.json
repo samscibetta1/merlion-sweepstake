@@ -72,7 +72,7 @@
     { "id": "mH5", "group": "H", "teamA": "Cape Verde", "teamB": "Saudi Arabia", "date": "2026-06-27", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "08:00", "minute": "" },
     { "id": "mH6", "group": "H", "teamA": "Uruguay", "teamB": "Spain", "date": "2026-06-27", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "08:00", "minute": "" },
     { "id": "mI1", "group": "I", "teamA": "France", "teamB": "Senegal", "date": "2026-06-17", "status": "final", "scoreA": 3, "scoreB": 1, "time": "03:00", "minute": "" },
-    { "id": "mI2", "group": "I", "teamA": "Iraq", "teamB": "Norway", "date": "2026-06-17", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "06:00", "minute": "" },
+    { "id": "mI2", "group": "I", "teamA": "Iraq", "teamB": "Norway", "date": "2026-06-17", "status": "final", "scoreA": 1, "scoreB": 4, "time": "06:00", "minute": "" },
     { "id": "mI3", "group": "I", "teamA": "France", "teamB": "Iraq", "date": "2026-06-23", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "05:00", "minute": "" },
     { "id": "mI4", "group": "I", "teamA": "Norway", "teamB": "Senegal", "date": "2026-06-23", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "08:00", "minute": "" },
     { "id": "mI5", "group": "I", "teamA": "Norway", "teamB": "France", "date": "2026-06-27", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "03:00", "minute": "" },
