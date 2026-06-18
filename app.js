@@ -395,11 +395,13 @@ function renderRoster() {
       acc.w += t.rec.w; acc.t += t.rec.t; acc.l += t.rec.l;
       return acc;
     }, { w: 0, t: 0, l: 0 });
-    return { person: p, teams, total };
+    // Points: win = +1, tie = 0, loss = -1.
+    const score = total.w - total.l;
+    return { person: p, teams, total, score };
   });
 
   standings.sort((a, b) =>
-    (b.total.w - a.total.w) || (b.total.t - a.total.t) ||
+    (b.score - a.score) || (b.total.w - a.total.w) ||
     (a.total.l - b.total.l) || a.person.name.localeCompare(b.person.name)
   );
 
@@ -422,10 +424,16 @@ function renderRoster() {
             <span class="rank">${i + 1}</span>
             <span class="person-name">${esc(s.person.name)}</span>
           </div>
-          <div class="total-record">
-            <span class="tr-stat tr-w"><b>${s.total.w}</b>W</span>
-            <span class="tr-stat tr-t"><b>${s.total.t}</b>T</span>
-            <span class="tr-stat tr-l"><b>${s.total.l}</b>L</span>
+          <div class="person-tally">
+            <div class="person-score ${s.score > 0 ? "ps-pos" : s.score < 0 ? "ps-neg" : ""}">
+              <span class="ps-num">${s.score > 0 ? "+" : ""}${s.score}</span>
+              <span class="ps-label">pts</span>
+            </div>
+            <div class="total-record">
+              <span class="tr-stat tr-w"><b>${s.total.w}</b>W</span>
+              <span class="tr-stat tr-t"><b>${s.total.t}</b>T</span>
+              <span class="tr-stat tr-l"><b>${s.total.l}</b>L</span>
+            </div>
           </div>
         </div>
         <div class="team-records">${rows}</div>
