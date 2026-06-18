@@ -84,7 +84,7 @@
     { "id": "mJ5", "group": "J", "teamA": "Algeria", "teamB": "Austria", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mJ6", "group": "J", "teamA": "Jordan", "teamB": "Argentina", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mK1", "group": "K", "teamA": "Portugal", "teamB": "Congo", "date": "2026-06-18", "status": "final", "scoreA": 1, "scoreB": 1, "time": "01:00", "minute": "" },
-    { "id": "mK2", "group": "K", "teamA": "Uzbekistan", "teamB": "Colombia", "date": "2026-06-18", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
+    { "id": "mK2", "group": "K", "teamA": "Uzbekistan", "teamB": "Colombia", "date": "2026-06-18", "status": "final", "scoreA": 1, "scoreB": 3, "time": "10:00", "minute": "" },
     { "id": "mK3", "group": "K", "teamA": "Portugal", "teamB": "Uzbekistan", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "01:00", "minute": "" },
     { "id": "mK4", "group": "K", "teamA": "Colombia", "teamB": "Congo", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mK5", "group": "K", "teamA": "Colombia", "teamB": "Portugal", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:30", "minute": "" },
