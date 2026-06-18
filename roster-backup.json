@@ -32,7 +32,7 @@
     { "id": "mB1", "group": "B", "teamA": "Canada", "teamB": "Bosnia", "date": "2026-06-13", "status": "final", "scoreA": 1, "scoreB": 1, "time": "03:00", "minute": "" },
     { "id": "mB2", "group": "B", "teamA": "Qatar", "teamB": "Switzerland", "date": "2026-06-14", "status": "final", "scoreA": 1, "scoreB": 1, "time": "03:00", "minute": "" },
     { "id": "mB3", "group": "B", "teamA": "Switzerland", "teamB": "Bosnia", "date": "2026-06-19", "status": "final", "scoreA": 4, "scoreB": 1, "time": "03:00", "minute": "" },
-    { "id": "mB4", "group": "B", "teamA": "Canada", "teamB": "Qatar", "date": "2026-06-19", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "06:00", "minute": "" },
+    { "id": "mB4", "group": "B", "teamA": "Canada", "teamB": "Qatar", "date": "2026-06-19", "status": "final", "scoreA": 6, "scoreB": 0, "time": "06:00", "minute": "" },
     { "id": "mB5", "group": "B", "teamA": "Switzerland", "teamB": "Canada", "date": "2026-06-25", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "03:00", "minute": "" },
     { "id": "mB6", "group": "B", "teamA": "Bosnia", "teamB": "Qatar", "date": "2026-06-25", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "03:00", "minute": "" },
     { "id": "mC1", "group": "C", "teamA": "Brazil", "teamB": "Morocco", "date": "2026-06-14", "status": "final", "scoreA": 1, "scoreB": 1, "time": "06:00", "minute": "" },
