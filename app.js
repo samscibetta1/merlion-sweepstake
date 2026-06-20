@@ -128,6 +128,7 @@ function defaultState() {
     feed: [],
     trashTalk: [],
     bracket: emptyBracket(),
+    teamStatus: {}, // normalized team name -> "clinched" | "eliminated"
     updatedAt: Date.now(),
   };
 }
@@ -234,6 +235,7 @@ function load() {
     assignKickoffTimes(s.matches);
     s.bracket = normalizeBracket(s.bracket);
     propagateBracket(s.bracket);
+    if (!s.teamStatus || typeof s.teamStatus !== "object") s.teamStatus = {};
     return s;
   } catch {
     return defaultState();
@@ -275,6 +277,7 @@ function initSync() {
       assignKickoffTimes(state.matches);
       state.bracket = normalizeBracket(state.bracket);
       propagateBracket(state.bracket);
+      if (!state.teamStatus || typeof state.teamStatus !== "object") state.teamStatus = {};
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       render();
       if (!document.getElementById("adminPanel").classList.contains("hidden")) renderAdmin();
@@ -314,6 +317,12 @@ function computeRecords() {
 
 function recordFor(records, teamName) {
   return records.get(teamName.trim().toLowerCase()) || { w: 0, t: 0, l: 0 };
+}
+
+// Manually-set knockout qualification status for a team.
+function teamStatusOf(teamName) {
+  const map = state.teamStatus || {};
+  return map[teamName.trim().toLowerCase()] || "";
 }
 
 function timeAgo(ts) {
@@ -486,15 +495,21 @@ function renderRoster() {
 
   list.innerHTML = standings.map((s, i) => {
     const rows = s.teams.length
-      ? s.teams.map((t) => `
-          <div class="team-row">
-            <span class="team-row-name">${esc(t.name)}</span>
+      ? s.teams.map((t) => {
+          const st = teamStatusOf(t.name);
+          const badge = st === "clinched" ? '<span class="ts-badge ts-check">✓</span>'
+            : st === "eliminated" ? '<span class="ts-badge ts-x">✗</span>' : "";
+          const cls = st ? ` status-${st}` : "";
+          return `
+          <div class="team-row${cls}">
+            <span class="team-row-name">${esc(t.name)}${badge}</span>
             <span class="wtl">
               <span class="wtl-w">${t.rec.w}W</span>
               <span class="wtl-t">${t.rec.t}T</span>
               <span class="wtl-l">${t.rec.l}L</span>
             </span>
-          </div>`).join("")
+          </div>`;
+        }).join("")
       : `<div class="team-row"><span class="team-row-name empty-chip">no teams yet</span></div>`;
     return `
       <div class="person-card">
@@ -615,6 +630,24 @@ function renderAdmin() {
   document.getElementById("adminTournament").value = state.tournament;
   renderAdminPeople();
   renderAdminMatches();
+  renderAdminTeamStatus();
+}
+
+function renderAdminTeamStatus() {
+  const wrap = document.getElementById("adminTeamStatus");
+  if (!wrap) return;
+  wrap.innerHTML = tournamentTeams().map((team) => {
+    const st = teamStatusOf(team);
+    return `
+      <div class="ts-admin-row">
+        <span class="ts-admin-name">${esc(team)}</span>
+        <select class="field ts-admin-select" data-act="tstatus" data-team="${esc(team)}">
+          <option value="" ${st === "" ? "selected" : ""}>—</option>
+          <option value="clinched" ${st === "clinched" ? "selected" : ""}>Clinched ✓</option>
+          <option value="eliminated" ${st === "eliminated" ? "selected" : ""}>Eliminated ✗</option>
+        </select>
+      </div>`;
+  }).join("");
 }
 
 function renderAdminPeople() {
@@ -827,6 +860,17 @@ document.getElementById("adminMatches").addEventListener("input", (e) => {
     const m = findMatch(el.dataset.mid);
     if (m) { m.minute = el.value; save(); }
   }
+});
+
+// ----- Admin: team clinched / eliminated status -----
+document.getElementById("adminTeamStatus").addEventListener("change", (e) => {
+  const el = e.target.closest("[data-act='tstatus']");
+  if (!el) return;
+  if (!state.teamStatus) state.teamStatus = {};
+  const key = el.dataset.team.trim().toLowerCase();
+  if (el.value) state.teamStatus[key] = el.value;
+  else delete state.teamStatus[key];
+  save();
 });
 
 // ----- Admin: feed -----

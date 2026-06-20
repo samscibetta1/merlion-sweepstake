@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
 </head>
 <body>
   <header class="topbar">
@@ -39,6 +39,10 @@
 
     <!-- ROSTER -->
     <section id="roster" class="view">
+      <div class="rank-legend">
+        <span class="legend-item"><span class="ts-badge ts-check">✓</span> statistically clinched</span>
+        <span class="legend-item"><span class="ts-badge ts-x">✗</span> statistically eliminated</span>
+      </div>
       <div id="rosterEmpty" class="empty hidden">No one's drafted teams yet.</div>
       <div id="rosterList" class="roster-list"></div>
     </section>
@@ -103,6 +107,14 @@
       </details>
 
       <details class="admin-group">
+        <summary>Clinched / eliminated</summary>
+        <div class="admin-content">
+          <p class="hint">Mark teams that have statistically clinched a knockout spot (✓) or been eliminated (✗). Shows in Group Round Ranking.</p>
+          <div id="adminTeamStatus" class="admin-team-status"></div>
+        </div>
+      </details>
+
+      <details class="admin-group">
         <summary>Post an update</summary>
         <div class="admin-content">
           <div class="row">
@@ -136,6 +148,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

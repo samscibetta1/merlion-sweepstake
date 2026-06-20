@@ -5,6 +5,7 @@
   --card-2: #1a2e25;
   --line: #21392e;
   --green: #1faa6b;
+  --green-bright: #35e08a;
   --green-deep: #0b3d2e;
   --gold: #f4c542;
   --red: #e5484d;
@@ -272,6 +273,38 @@ html, body {
 .wtl-t { color: var(--muted); }
 .wtl-l { color: var(--red); }
 .empty-chip { color: var(--muted); font-weight: 500; }
+
+/* Clinched / eliminated status */
+.rank-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.ts-badge { font-weight: 800; font-size: 13px; margin-left: 5px; }
+.legend-item .ts-badge { margin-left: 0; }
+.ts-check { color: var(--green-bright); }
+.ts-x { color: var(--red); }
+.team-row.status-clinched .team-row-name { color: var(--green-bright); font-weight: 800; }
+.team-row.status-eliminated .team-row-name { color: var(--muted); }
+.team-row.status-eliminated .wtl { opacity: 0.5; }
+
+/* Admin: team status editor */
+.admin-team-status { display: flex; flex-direction: column; gap: 2px; }
+.ts-admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  border-top: 1px solid var(--line);
+}
+.ts-admin-row:first-child { border-top: none; }
+.ts-admin-name { font-size: 14px; font-weight: 600; }
+.ts-admin-select { width: 150px; flex-shrink: 0; padding: 6px 8px; }
 
 /* FEED */
 .feed-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
