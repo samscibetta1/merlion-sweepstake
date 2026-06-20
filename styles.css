@@ -353,11 +353,13 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  padding: 7px 10px;
-  min-height: 36px;
+  padding: 6px 10px;
+  min-height: 40px;
 }
 .kslot + .kslot { border-top: 1px solid var(--line); }
 .kslot.kwin { background: var(--green-deep); }
+.kteam-wrap { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+.kowner { font-size: 10px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kteam-name { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kteam-name.kwin { color: var(--green); font-weight: 800; }
 .kempty { color: var(--muted); }
@@ -371,7 +373,7 @@ html, body {
   cursor: pointer;
   padding: 0;
   text-align: left;
-  flex: 1;
+  width: 100%;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -379,7 +381,7 @@ html, body {
 }
 .kteam-btn.kwin { color: var(--green); font-weight: 800; }
 .kteam-select {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   background: var(--bg-soft);
   color: var(--text);

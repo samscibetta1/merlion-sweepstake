@@ -519,6 +519,8 @@ function kMatch(round, i, m, editable, teamOptions) {
     const team = m[s];
     const isWin = m.winner === s;
     const winCls = isWin ? " kwin" : "";
+    const owner = team ? ownerOf(team) : "";
+    const ownerHtml = owner ? `<span class="kowner">${esc(owner)}</span>` : "";
     if (editable && round === "r32") {
       const opts = ['<option value=""></option>']
         .concat(teamOptions.map((t) => `<option value="${esc(t)}" ${t === team ? "selected" : ""}>${esc(t)}</option>`))
@@ -527,15 +529,18 @@ function kMatch(round, i, m, editable, teamOptions) {
         ? `<button class="kpick${winCls}" data-act="kwin" data-round="${round}" data-mi="${i}" data-slot="${s}" title="Mark as winner">${isWin ? "✓" : "○"}</button>`
         : "";
       return `<div class="kslot${winCls}">
-          <select class="kteam-select" data-act="kteam" data-round="${round}" data-mi="${i}" data-slot="${s}">${opts}</select>
+          <span class="kteam-wrap">
+            <select class="kteam-select" data-act="kteam" data-round="${round}" data-mi="${i}" data-slot="${s}">${opts}</select>
+            ${ownerHtml}
+          </span>
           ${pick}
         </div>`;
     }
     const label = team ? esc(team) : '<span class="kempty">—</span>';
-    const inner = editable && team
+    const nameHtml = editable && team
       ? `<button class="kteam-btn${winCls}" data-act="kwin" data-round="${round}" data-mi="${i}" data-slot="${s}">${label}</button>`
       : `<span class="kteam-name${winCls}">${label}</span>`;
-    return `<div class="kslot${winCls}">${inner}</div>`;
+    return `<div class="kslot${winCls}"><span class="kteam-wrap">${nameHtml}${ownerHtml}</span></div>`;
   };
   return `<div class="kmatch">${slotHtml("a")}${slotHtml("b")}</div>`;
 }
