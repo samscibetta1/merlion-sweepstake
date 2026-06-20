@@ -734,8 +734,9 @@ document.querySelectorAll(".tab").forEach((tab) => {
     document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById(tab.dataset.view).classList.add("active");
-    // Let the just-shown view lay out before snapping to Today.
+    // Live Updates snaps to Today; every other tab opens at the top.
     if (tab.dataset.view === "scoreboard") setTimeout(scrollToToday, 60);
+    else window.scrollTo(0, 0);
   });
 });
 
