@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <header class="topbar">
@@ -24,7 +24,8 @@
     </div>
     <nav class="tabs">
       <button class="tab active" data-view="scoreboard" type="button">Live Updates</button>
-      <button class="tab" data-view="roster" type="button">Rankings</button>
+      <button class="tab" data-view="roster" type="button">Group Round Ranking</button>
+      <button class="tab" data-view="knockout" type="button">Knockout Round</button>
       <button class="tab" data-view="trashtalk" type="button">Trash Talk</button>
     </nav>
   </header>
@@ -40,6 +41,11 @@
     <section id="roster" class="view">
       <div id="rosterEmpty" class="empty hidden">No one's drafted teams yet.</div>
       <div id="rosterList" class="roster-list"></div>
+    </section>
+
+    <!-- KNOCKOUT ROUND -->
+    <section id="knockout" class="view">
+      <div id="knockoutBracket" class="knockout"></div>
     </section>
 
     <!-- TRASH TALK -->
@@ -130,6 +136,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

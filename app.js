@@ -127,6 +127,7 @@ function defaultState() {
     matches: seedMatches(),
     feed: [],
     trashTalk: [],
+    bracket: emptyBracket(),
     updatedAt: Date.now(),
   };
 }
@@ -158,11 +159,81 @@ function assignKickoffTimes(matches) {
   }
 }
 
+// ----- Knockout bracket -----
+// Single-elimination: Round of 32 (16 matches) -> R16 (8) -> QF (4) -> SF (2)
+// -> Final (1), plus a third-place match. Only R32 team slots are filled by
+// hand (as teams clinch); every later round's teams are derived from winners.
+const BRACKET_ROUNDS = [["r32", 16], ["r16", 8], ["qf", 4], ["sf", 2], ["final", 1], ["third", 1]];
+function emptyMatch() { return { a: "", b: "", winner: null }; }
+function emptyBracket() {
+  const out = {};
+  for (const [round, n] of BRACKET_ROUNDS) out[round] = Array.from({ length: n }, emptyMatch);
+  return out;
+}
+function normalizeBracket(raw) {
+  const b = raw && typeof raw === "object" ? raw : {};
+  const out = {};
+  for (const [round, n] of BRACKET_ROUNDS) {
+    const src = Array.isArray(b[round]) ? b[round] : [];
+    out[round] = Array.from({ length: n }, (_, i) => {
+      const m = src[i] || {};
+      return {
+        a: typeof m.a === "string" ? m.a : "",
+        b: typeof m.b === "string" ? m.b : "",
+        winner: m.winner === "a" || m.winner === "b" ? m.winner : null,
+      };
+    });
+  }
+  return out;
+}
+function winnerTeam(m) {
+  if (!m) return "";
+  if (m.winner === "a") return m.a;
+  if (m.winner === "b") return m.b;
+  return "";
+}
+function loserTeam(m) {
+  if (!m) return "";
+  if (m.winner === "a") return m.b;
+  if (m.winner === "b") return m.a;
+  return "";
+}
+// Fill each downstream round's team slots from the previous round's winners,
+// clearing a stored winner if its team is no longer present.
+function propagateBracket(b) {
+  const fix = (m) => {
+    if (m.winner === "a" && !m.a) m.winner = null;
+    if (m.winner === "b" && !m.b) m.winner = null;
+  };
+  const chain = [["r32", "r16"], ["r16", "qf"], ["qf", "sf"], ["sf", "final"]];
+  for (const [from, to] of chain) {
+    b[to].forEach((m, i) => {
+      m.a = winnerTeam(b[from][2 * i]);
+      m.b = winnerTeam(b[from][2 * i + 1]);
+      fix(m);
+    });
+  }
+  b.third[0].a = loserTeam(b.sf[0]);
+  b.third[0].b = loserTeam(b.sf[1]);
+  fix(b.third[0]);
+}
+// Teams actually in this tournament, derived from the match list.
+function tournamentTeams() {
+  const set = new Set();
+  for (const m of state.matches) {
+    if (m.teamA) set.add(m.teamA);
+    if (m.teamB) set.add(m.teamB);
+  }
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const s = raw ? Object.assign(defaultState(), JSON.parse(raw)) : defaultState();
     assignKickoffTimes(s.matches);
+    s.bracket = normalizeBracket(s.bracket);
+    propagateBracket(s.bracket);
     return s;
   } catch {
     return defaultState();
@@ -181,6 +252,7 @@ let state = load();
 // ----- Firebase live sync (optional; off until firebase-config.js is filled in) -----
 let fbRef = null;
 let applyingRemote = false;
+let bracketEdit = false; // session-only: is the knockout bracket in edit mode
 
 function initSync() {
   const cfg = window.FIREBASE_CONFIG;
@@ -200,6 +272,8 @@ function initSync() {
       if (!state.trashTalk) state.trashTalk = [];
       if (!state.feed) state.feed = [];
       assignKickoffTimes(state.matches);
+      state.bracket = normalizeBracket(state.bracket);
+      propagateBracket(state.bracket);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       render();
       if (!document.getElementById("adminPanel").classList.contains("hidden")) renderAdmin();
@@ -267,6 +341,7 @@ function render() {
   document.title = state.tournament || "World Cup Scores";
   renderMatches();
   renderRoster();
+  renderKnockout();
   renderFeed();
   renderTrashTalk();
   document.getElementById("lastUpdated").textContent = "Updated " + timeAgo(state.updatedAt);
@@ -431,6 +506,69 @@ function renderRoster() {
         <div class="team-records">${rows}</div>
       </div>`;
   }).join("");
+}
+
+function kMatch(round, i, m, editable, teamOptions) {
+  const slotHtml = (s) => {
+    const team = m[s];
+    const isWin = m.winner === s;
+    const winCls = isWin ? " kwin" : "";
+    if (editable && round === "r32") {
+      const opts = ['<option value=""></option>']
+        .concat(teamOptions.map((t) => `<option value="${esc(t)}" ${t === team ? "selected" : ""}>${esc(t)}</option>`))
+        .join("");
+      const pick = team
+        ? `<button class="kpick${winCls}" data-act="kwin" data-round="${round}" data-mi="${i}" data-slot="${s}" title="Mark as winner">${isWin ? "✓" : "○"}</button>`
+        : "";
+      return `<div class="kslot${winCls}">
+          <select class="kteam-select" data-act="kteam" data-round="${round}" data-mi="${i}" data-slot="${s}">${opts}</select>
+          ${pick}
+        </div>`;
+    }
+    const label = team ? esc(team) : '<span class="kempty">—</span>';
+    const inner = editable && team
+      ? `<button class="kteam-btn${winCls}" data-act="kwin" data-round="${round}" data-mi="${i}" data-slot="${s}">${label}</button>`
+      : `<span class="kteam-name${winCls}">${label}</span>`;
+    return `<div class="kslot${winCls}">${inner}</div>`;
+  };
+  return `<div class="kmatch">${slotHtml("a")}${slotHtml("b")}</div>`;
+}
+
+function renderKnockout() {
+  const el = document.getElementById("knockoutBracket");
+  if (!el) return;
+  const b = state.bracket || (state.bracket = emptyBracket());
+  const editable = bracketEdit;
+  const teamOptions = tournamentTeams();
+  const rounds = [
+    ["Round of 32", "r32"],
+    ["Round of 16", "r16"],
+    ["Quarterfinals", "qf"],
+    ["Semifinals", "sf"],
+    ["Final", "final"],
+  ];
+  const cols = rounds.map(([label, key]) => `
+    <div class="bracket-col bracket-col-${key}">
+      <div class="bracket-round">${label}</div>
+      <div class="bracket-matches">
+        ${b[key].map((m, i) => kMatch(key, i, m, editable, teamOptions)).join("")}
+      </div>
+    </div>`).join("");
+  const champ = winnerTeam(b.final[0]);
+  const champHtml = `<div class="champion ${champ ? "has" : ""}">🏆 ${champ ? esc(champ) : "Champion TBD"}</div>`;
+  const thirdHtml = `
+    <div class="bracket-third">
+      <div class="bracket-round">Third place</div>
+      ${kMatch("third", 0, b.third[0], editable, teamOptions)}
+    </div>`;
+  el.innerHTML = `
+    <div class="bracket-toolbar">
+      <button id="bracketEditToggle" class="ghost-btn small" type="button">${editable ? "Done editing" : "Edit bracket"}</button>
+      ${editable ? '<span class="bracket-hint">Choose Round of 32 teams, then tap a team to advance them.</span>' : ""}
+    </div>
+    ${champHtml}
+    <div class="bracket-scroll"><div class="bracket">${cols}</div></div>
+    ${thirdHtml}`;
 }
 
 function renderFeed() {
@@ -693,6 +831,31 @@ document.getElementById("talkText").addEventListener("keydown", (e) => {
 });
 const savedTalkName = localStorage.getItem(TALK_NAME_KEY);
 if (savedTalkName) document.getElementById("talkName").value = savedTalkName;
+
+// ----- Knockout bracket editing -----
+document.getElementById("knockout").addEventListener("click", (e) => {
+  if (e.target.closest("#bracketEditToggle")) {
+    bracketEdit = !bracketEdit;
+    renderKnockout();
+    return;
+  }
+  const win = e.target.closest("[data-act='kwin']");
+  if (!win) return;
+  const { round, mi, slot } = win.dataset;
+  const m = state.bracket[round][+mi];
+  if (!m[slot]) return;
+  m.winner = m.winner === slot ? null : slot;
+  propagateBracket(state.bracket);
+  save();
+});
+document.getElementById("knockout").addEventListener("change", (e) => {
+  const sel = e.target.closest("[data-act='kteam']");
+  if (!sel) return;
+  const { round, mi, slot } = sel.dataset;
+  state.bracket[round][+mi][slot] = sel.value;
+  propagateBracket(state.bracket);
+  save();
+});
 
 // ----- Admin: backup -----
 document.getElementById("exportData").addEventListener("click", () => {

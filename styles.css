@@ -63,8 +63,9 @@ html, body {
   color: var(--muted);
   font: inherit;
   font-weight: 600;
-  font-size: 14px;
-  padding: 12px 6px;
+  font-size: 12.5px;
+  line-height: 1.2;
+  padding: 11px 4px;
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: color 0.15s, border-color 0.15s;
@@ -311,6 +312,99 @@ html, body {
 .talk-author { font-size: 13px; font-weight: 700; color: var(--green); }
 .talk-time { font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .talk-body { font-size: 15px; font-weight: 500; word-break: break-word; }
+
+/* KNOCKOUT BRACKET */
+.bracket-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.bracket-hint { font-size: 12px; color: var(--muted); }
+.champion {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--muted);
+}
+.champion.has { color: var(--gold); border-color: var(--gold); }
+.bracket-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
+.bracket { display: flex; gap: 14px; align-items: stretch; min-width: max-content; }
+.bracket-col { display: flex; flex-direction: column; width: 150px; flex-shrink: 0; }
+.bracket-round {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.bracket-matches { display: flex; flex-direction: column; justify-content: space-around; gap: 10px; flex: 1; }
+.kmatch {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.kslot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 7px 10px;
+  min-height: 36px;
+}
+.kslot + .kslot { border-top: 1px solid var(--line); }
+.kslot.kwin { background: var(--green-deep); }
+.kteam-name { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kteam-name.kwin { color: var(--green); font-weight: 800; }
+.kempty { color: var(--muted); }
+.kteam-btn {
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kteam-btn.kwin { color: var(--green); font-weight: 800; }
+.kteam-select {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-soft);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 12px;
+}
+.kpick {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.kpick.kwin { color: var(--green); }
+.bracket-third {
+  margin-top: 18px;
+  max-width: 280px;
+}
+.bracket-third .kmatch { margin-top: 8px; }
 
 /* FOOTER */
 .footer {
