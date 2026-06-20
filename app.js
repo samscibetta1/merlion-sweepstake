@@ -253,6 +253,7 @@ let state = load();
 let fbRef = null;
 let applyingRemote = false;
 let bracketEdit = false; // session-only: is the knockout bracket in edit mode
+let lockTodayScroll = true; // keep Live Updates snapped to "Today" until the user scrolls
 
 function initSync() {
   const cfg = window.FIREBASE_CONFIG;
@@ -345,6 +346,11 @@ function render() {
   renderFeed();
   renderTrashTalk();
   document.getElementById("lastUpdated").textContent = "Updated " + timeAgo(state.updatedAt);
+  // Until the user takes over, keep the Live Updates view pinned to Today — this
+  // survives the re-renders that fire as cloud data syncs in just after load.
+  if (lockTodayScroll && document.getElementById("scoreboard").classList.contains("active")) {
+    requestAnimationFrame(scrollToToday);
+  }
 }
 
 function fmtDate(iso) {
@@ -664,6 +670,25 @@ function renderAdminMatches() {
 function findMatch(id) { return state.matches.find((m) => m.id === id); }
 function findPerson(id) { return state.people.find((p) => p.id === id); }
 
+// Position the Live Updates view so today's matches sit at the top, just below
+// the sticky header — scroll up for past days, down for upcoming ones. Falls
+// back to the next upcoming day if today has no matches.
+function scrollToToday() {
+  const list = document.getElementById("matchList");
+  if (!list) return;
+  const today = todayISO();
+  let el = list.querySelector(`.day-group[data-date="${today}"]`);
+  if (!el) {
+    const groups = [...list.querySelectorAll(".day-group")];
+    el = groups.find((g) => (g.dataset.date || "") >= today) || groups[groups.length - 1];
+  }
+  if (!el) return;
+  const header = document.querySelector(".topbar");
+  const offset = (header ? header.offsetHeight : 0) + 8;
+  const y = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo(0, Math.max(0, y));
+}
+
 // ----- Tab switching -----
 document.querySelectorAll(".tab").forEach((tab) => {
   tab.addEventListener("click", () => {
@@ -671,6 +696,8 @@ document.querySelectorAll(".tab").forEach((tab) => {
     document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById(tab.dataset.view).classList.add("active");
+    // Let the just-shown view lay out before snapping to Today.
+    if (tab.dataset.view === "scoreboard") setTimeout(scrollToToday, 60);
   });
 });
 
@@ -901,6 +928,13 @@ document.getElementById("teamOptions").innerHTML =
 setInterval(() => {
   document.getElementById("lastUpdated").textContent = "Updated " + timeAgo(state.updatedAt);
 }, 30000);
+
+// Once the user scrolls/taps (or a few seconds pass), stop auto-pinning to Today
+// so live score updates never yank their place.
+["wheel", "touchstart", "keydown"].forEach((ev) =>
+  window.addEventListener(ev, () => { lockTodayScroll = false; }, { passive: true })
+);
+setTimeout(() => { lockTodayScroll = false; }, 4000);
 
 render();
 initSync();
