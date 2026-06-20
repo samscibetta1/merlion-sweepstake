@@ -566,16 +566,19 @@ function renderKnockout() {
   const b = state.bracket || (state.bracket = emptyBracket());
   const editable = bracketEdit;
   const teamOptions = tournamentTeams();
+  // Dates are Singapore time. The official 2026 knockout schedule is in North
+  // American local dates (R32 Jun 28–Jul 3 ... Final Jul 19); every match kicks
+  // off in the NA afternoon/evening, which lands on the next day in SGT (+1).
   const rounds = [
-    ["Round of 32", "r32"],
-    ["Round of 16", "r16"],
-    ["Quarterfinals", "qf"],
-    ["Semifinals", "sf"],
-    ["Final", "final"],
+    ["Round of 32", "r32", "Jun 29 – Jul 4"],
+    ["Round of 16", "r16", "Jul 5 – Jul 8"],
+    ["Quarterfinals", "qf", "Jul 10 – Jul 12"],
+    ["Semifinals", "sf", "Jul 15 – Jul 16"],
+    ["Final", "final", "Jul 20"],
   ];
-  const cols = rounds.map(([label, key]) => `
+  const cols = rounds.map(([label, key, dates]) => `
     <div class="bracket-col bracket-col-${key}">
-      <div class="bracket-round">${label}</div>
+      <div class="bracket-round">${label}<span class="bracket-date">${dates}</span></div>
       <div class="bracket-matches">
         ${b[key].map((m, i) => kMatch(key, i, m, editable, teamOptions)).join("")}
       </div>
@@ -584,7 +587,7 @@ function renderKnockout() {
   const champHtml = `<div class="champion ${champ ? "has" : ""}">🏆 ${champ ? esc(champ) : "Champion TBD"}</div>`;
   const thirdHtml = `
     <div class="bracket-third">
-      <div class="bracket-round">Third place</div>
+      <div class="bracket-round">Third place<span class="bracket-date">Jul 19</span></div>
       ${kMatch("third", 0, b.third[0], editable, teamOptions)}
     </div>`;
   // Teams already confirmed through to the knockouts (clinched in Group Round Ranking).
