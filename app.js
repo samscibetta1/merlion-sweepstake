@@ -587,7 +587,23 @@ function renderKnockout() {
       <div class="bracket-round">Third place</div>
       ${kMatch("third", 0, b.third[0], editable, teamOptions)}
     </div>`;
+  // Teams already confirmed through to the knockouts (clinched in Group Round Ranking).
+  const byNorm = new Map(teamOptions.map((t) => [t.toLowerCase(), t]));
+  const clinched = Object.entries(state.teamStatus || {})
+    .filter(([, v]) => v === "clinched")
+    .map(([k]) => byNorm.get(k) || k)
+    .sort((a, b2) => a.localeCompare(b2));
+  const qualifiedHtml = clinched.length
+    ? `<div class="kq-summary">
+        <span class="kq-title">Through to the knockouts</span>
+        <div class="kq-list">${clinched.map((t) => {
+          const o = ownerOf(t);
+          return `<span class="kq-chip">✓ ${esc(t)}${o ? ` <span class="kq-owner">${esc(o)}</span>` : ""}</span>`;
+        }).join("")}</div>
+      </div>`
+    : "";
   el.innerHTML = `
+    ${qualifiedHtml}
     <div class="bracket-toolbar">
       <button id="bracketEditToggle" class="ghost-btn small" type="button">${editable ? "Done editing" : "Edit bracket"}</button>
       ${editable ? '<span class="bracket-hint">Choose Round of 32 teams, then tap a team to advance them.</span>' : ""}
