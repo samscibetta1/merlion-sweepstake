@@ -44,7 +44,7 @@
     { "id": "mD1", "group": "D", "teamA": "USA", "teamB": "Paraguay", "date": "2026-06-13", "status": "final", "scoreA": 4, "scoreB": 1, "time": "09:00", "minute": "" },
     { "id": "mD2", "group": "D", "teamA": "Australia", "teamB": "Turkey", "date": "2026-06-14", "status": "final", "scoreA": 2, "scoreB": 0, "time": "12:00", "minute": "" },
     { "id": "mD3", "group": "D", "teamA": "USA", "teamB": "Australia", "date": "2026-06-20", "status": "final", "scoreA": 2, "scoreB": 0, "time": "03:00", "minute": "" },
-    { "id": "mD4", "group": "D", "teamA": "Turkey", "teamB": "Paraguay", "date": "2026-06-20", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "12:00", "minute": "" },
+    { "id": "mD4", "group": "D", "teamA": "Turkey", "teamB": "Paraguay", "date": "2026-06-20", "status": "final", "scoreA": 0, "scoreB": 1, "time": "12:00", "minute": "" },
     { "id": "mD5", "group": "D", "teamA": "Turkey", "teamB": "USA", "date": "2026-06-26", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mD6", "group": "D", "teamA": "Paraguay", "teamB": "Australia", "date": "2026-06-26", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "10:00", "minute": "" },
     { "id": "mE1", "group": "E", "teamA": "Germany", "teamB": "Curacao", "date": "2026-06-15", "status": "final", "scoreA": 7, "scoreB": 1, "time": "01:00", "minute": "" },
