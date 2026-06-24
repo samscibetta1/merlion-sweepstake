@@ -92,7 +92,7 @@
     { "id": "mL1", "group": "L", "teamA": "England", "teamB": "Croatia", "date": "2026-06-18", "status": "final", "scoreA": 4, "scoreB": 2, "time": "04:00", "minute": "" },
     { "id": "mL2", "group": "L", "teamA": "Ghana", "teamB": "Panama", "date": "2026-06-18", "status": "final", "scoreA": 1, "scoreB": 0, "time": "07:00", "minute": "" },
     { "id": "mL3", "group": "L", "teamA": "England", "teamB": "Ghana", "date": "2026-06-24", "status": "final", "scoreA": 0, "scoreB": 0, "time": "04:00", "minute": "" },
-    { "id": "mL4", "group": "L", "teamA": "Panama", "teamB": "Croatia", "date": "2026-06-24", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "07:00", "minute": "" },
+    { "id": "mL4", "group": "L", "teamA": "Panama", "teamB": "Croatia", "date": "2026-06-24", "status": "final", "scoreA": 0, "scoreB": 1, "time": "07:00", "minute": "" },
     { "id": "mL5", "group": "L", "teamA": "Panama", "teamB": "England", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "05:00", "minute": "" },
     { "id": "mL6", "group": "L", "teamA": "Croatia", "teamB": "Ghana", "date": "2026-06-28", "status": "scheduled", "scoreA": 0, "scoreB": 0, "time": "05:00", "minute": "" }
   ],

@@ -109,7 +109,7 @@ const SEED_MATCHES = [
   ["L", "England", "Croatia", "2026-06-18", "final", 4, 2, "04:00"],
   ["L", "Ghana", "Panama", "2026-06-18", "final", 1, 0, "07:00"],
   ["L", "England", "Ghana", "2026-06-24", "final", 0, 0, "04:00"],
-  ["L", "Panama", "Croatia", "2026-06-24", "scheduled", 0, 0, "07:00"],
+  ["L", "Panama", "Croatia", "2026-06-24", "final", 0, 1, "07:00"],
   ["L", "Panama", "England", "2026-06-28", "scheduled", 0, 0, "05:00"],
   ["L", "Croatia", "Ghana", "2026-06-28", "scheduled", 0, 0, "05:00"],
 ];
