@@ -103,7 +103,7 @@ const SEED_MATCHES = [
   ["K", "Portugal", "Congo", "2026-06-18", "final", 1, 1, "01:00"],
   ["K", "Uzbekistan", "Colombia", "2026-06-18", "final", 1, 3, "10:00"],
   ["K", "Portugal", "Uzbekistan", "2026-06-24", "final", 5, 0, "01:00"],
-  ["K", "Colombia", "Congo", "2026-06-24", "scheduled", 0, 0, "10:00"],
+  ["K", "Colombia", "Congo", "2026-06-24", "final", 1, 0, "10:00"],
   ["K", "Colombia", "Portugal", "2026-06-28", "scheduled", 0, 0, "07:30"],
   ["K", "Congo", "Uzbekistan", "2026-06-28", "scheduled", 0, 0, "07:30"],
   ["L", "England", "Croatia", "2026-06-18", "final", 4, 2, "04:00"],
