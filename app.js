@@ -529,7 +529,57 @@ function renderRoster() {
   }).join("");
 }
 
+// Official 2026 knockout schedule, converted to Singapore time (UTC+8) and mapped
+// onto our bracket tree via FIFA's match linkage (R16 89=W74/W77, 90=W73/W75, ...).
+// Each slot's date/time is fixed by the bracket position regardless of who fills it.
+const KNOCKOUT_SCHEDULE = {
+  r32: [
+    { date: "2026-06-30", time: "04:30" }, // M74
+    { date: "2026-07-01", time: "05:00" }, // M77
+    { date: "2026-06-29", time: "03:00" }, // M73
+    { date: "2026-06-30", time: "09:00" }, // M75
+    { date: "2026-07-03", time: "07:00" }, // M83
+    { date: "2026-07-03", time: "03:00" }, // M84
+    { date: "2026-07-02", time: "08:00" }, // M81
+    { date: "2026-07-02", time: "04:00" }, // M82
+    { date: "2026-06-30", time: "01:00" }, // M76
+    { date: "2026-07-01", time: "01:00" }, // M78
+    { date: "2026-07-01", time: "09:00" }, // M79
+    { date: "2026-07-02", time: "00:00" }, // M80
+    { date: "2026-07-04", time: "06:00" }, // M86
+    { date: "2026-07-04", time: "02:00" }, // M88
+    { date: "2026-07-03", time: "11:00" }, // M85
+    { date: "2026-07-04", time: "09:30" }, // M87
+  ],
+  r16: [
+    { date: "2026-07-05", time: "05:00" }, // M89
+    { date: "2026-07-05", time: "01:00" }, // M90
+    { date: "2026-07-07", time: "03:00" }, // M93
+    { date: "2026-07-07", time: "05:00" }, // M94
+    { date: "2026-07-06", time: "04:00" }, // M91
+    { date: "2026-07-06", time: "08:00" }, // M92
+    { date: "2026-07-08", time: "00:00" }, // M95
+    { date: "2026-07-08", time: "04:00" }, // M96
+  ],
+  qf: [
+    { date: "2026-07-10", time: "04:00" }, // M97
+    { date: "2026-07-11", time: "03:00" }, // M98
+    { date: "2026-07-12", time: "05:00" }, // M99
+    { date: "2026-07-12", time: "09:00" }, // M100
+  ],
+  sf: [
+    { date: "2026-07-15", time: "03:00" }, // M101
+    { date: "2026-07-16", time: "03:00" }, // M102
+  ],
+  final: [{ date: "2026-07-20", time: "03:00" }], // M104
+  third: [{ date: "2026-07-19", time: "05:00" }], // M103
+};
+
 function kMatch(round, i, m, editable, teamOptions) {
+  const sched = (KNOCKOUT_SCHEDULE[round] || [])[i];
+  const whenHtml = sched
+    ? `<div class="kmatch-when">${fmtDate(sched.date)} &middot; ${fmt12(sched.time)}</div>`
+    : "";
   const slotHtml = (s) => {
     const team = m[s];
     const isWin = m.winner === s;
@@ -557,7 +607,7 @@ function kMatch(round, i, m, editable, teamOptions) {
       : `<span class="kteam-name${winCls}">${label}</span>`;
     return `<div class="kslot${winCls}"><span class="kteam-wrap">${nameHtml}${ownerHtml}</span></div>`;
   };
-  return `<div class="kmatch">${slotHtml("a")}${slotHtml("b")}</div>`;
+  return `<div class="kmatch">${whenHtml}${slotHtml("a")}${slotHtml("b")}</div>`;
 }
 
 function renderKnockout() {
@@ -566,19 +616,16 @@ function renderKnockout() {
   const b = state.bracket || (state.bracket = emptyBracket());
   const editable = bracketEdit;
   const teamOptions = tournamentTeams();
-  // Dates are Singapore time. The official 2026 knockout schedule is in North
-  // American local dates (R32 Jun 28–Jul 3 ... Final Jul 19); every match kicks
-  // off in the NA afternoon/evening, which lands on the next day in SGT (+1).
   const rounds = [
-    ["Round of 32", "r32", "Jun 29 – Jul 4"],
-    ["Round of 16", "r16", "Jul 5 – Jul 8"],
-    ["Quarterfinals", "qf", "Jul 10 – Jul 12"],
-    ["Semifinals", "sf", "Jul 15 – Jul 16"],
-    ["Final", "final", "Jul 20"],
+    ["Round of 32", "r32"],
+    ["Round of 16", "r16"],
+    ["Quarterfinals", "qf"],
+    ["Semifinals", "sf"],
+    ["Final", "final"],
   ];
-  const cols = rounds.map(([label, key, dates]) => `
+  const cols = rounds.map(([label, key]) => `
     <div class="bracket-col bracket-col-${key}">
-      <div class="bracket-round">${label}<span class="bracket-date">${dates}</span></div>
+      <div class="bracket-round">${label}</div>
       <div class="bracket-matches">
         ${b[key].map((m, i) => kMatch(key, i, m, editable, teamOptions)).join("")}
       </div>
@@ -587,7 +634,7 @@ function renderKnockout() {
   const champHtml = `<div class="champion ${champ ? "has" : ""}">🏆 ${champ ? esc(champ) : "Champion TBD"}</div>`;
   const thirdHtml = `
     <div class="bracket-third">
-      <div class="bracket-round">Third place<span class="bracket-date">Jul 19</span></div>
+      <div class="bracket-round">Third place</div>
       ${kMatch("third", 0, b.third[0], editable, teamOptions)}
     </div>`;
   // Teams already confirmed through to the knockouts (clinched in Group Round Ranking).
