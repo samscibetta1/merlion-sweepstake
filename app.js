@@ -575,10 +575,18 @@ const KNOCKOUT_SCHEDULE = {
   third: [{ date: "2026-07-19", time: "05:00" }], // M103
 };
 
+// Three-letter weekday for a "YYYY-MM-DD" calendar date (timezone-safe).
+function weekdayOf(iso) {
+  const p = (iso || "").split("-").map(Number);
+  if (p.length !== 3) return "";
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay()];
+}
+
 function kMatch(round, i, m, editable, teamOptions) {
   const sched = (KNOCKOUT_SCHEDULE[round] || [])[i];
   const whenHtml = sched
-    ? `<div class="kmatch-when">${fmtDate(sched.date)} &middot; ${fmt12(sched.time)}</div>`
+    ? `<div class="kmatch-when">${weekdayOf(sched.date)}, ${fmtDate(sched.date)} &middot; ${fmt12(sched.time)}</div>`
     : "";
   const slotHtml = (s) => {
     const team = m[s];
