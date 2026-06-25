@@ -409,8 +409,9 @@ function renderMatches() {
     openDaysSeeded = true;
   }
 
+  const all = state.matches.concat(knockoutFixtures());
   const byDate = new Map();
-  for (const m of state.matches) {
+  for (const m of all) {
     const key = m.date || "";
     if (!byDate.has(key)) byDate.set(key, []);
     byDate.get(key).push(m);
@@ -447,10 +448,14 @@ function renderMatches() {
 function matchCard(m) {
   const statusLabel = { live: "Live", scheduled: "Upcoming", final: "Full time" }[m.status];
   const minute = m.status === "live" && m.minute ? ` &middot; ${esc(m.minute)}'` : "";
-  const ownerA = ownerOf(m.teamA);
-  const ownerB = ownerOf(m.teamB);
+  const ownerA = m.teamA ? ownerOf(m.teamA) : null;
+  const ownerB = m.teamB ? ownerOf(m.teamB) : null;
   const showScore = m.status !== "scheduled";
-  const meta = [m.group ? `Group ${esc(m.group)}` : "", fmtDate(m.date), fmt12(m.time)].filter(Boolean).join(" &middot; ");
+  const label = m.roundLabel ? esc(m.roundLabel) : (m.group ? `Group ${esc(m.group)}` : "");
+  const meta = [label, fmtDate(m.date), fmt12(m.time)].filter(Boolean).join(" &middot; ");
+  const teamHtml = (team, owner) => `
+        <span class="team-name ${team ? "" : "tbd"}">${esc(team || "TBD")}</span>
+        ${team ? `<span class="team-owner ${owner ? "" : "none"}">${owner ? esc(owner) : "unclaimed"}</span>` : ""}`;
   return `
     <div class="match-card">
       <div class="match-top">
@@ -458,17 +463,11 @@ function matchCard(m) {
         <span class="match-status status-${m.status}"><span class="dot"></span>${statusLabel}${minute}</span>
       </div>
       <div class="match-row">
-        <div class="team home">
-          <span class="team-name">${esc(m.teamA)}</span>
-          <span class="team-owner ${ownerA ? "" : "none"}">${ownerA ? esc(ownerA) : "unclaimed"}</span>
-        </div>
+        <div class="team home">${teamHtml(m.teamA, ownerA)}</div>
         <div class="score">
           ${showScore ? `<span>${m.scoreA}</span><span class="sep">–</span><span>${m.scoreB}</span>` : `<span class="sep">vs</span>`}
         </div>
-        <div class="team away">
-          <span class="team-name">${esc(m.teamB)}</span>
-          <span class="team-owner ${ownerB ? "" : "none"}">${ownerB ? esc(ownerB) : "unclaimed"}</span>
-        </div>
+        <div class="team away">${teamHtml(m.teamB, ownerB)}</div>
       </div>
     </div>`;
 }
@@ -574,6 +573,38 @@ const KNOCKOUT_SCHEDULE = {
   final: [{ date: "2026-07-20", time: "03:00" }], // M104
   third: [{ date: "2026-07-19", time: "05:00" }], // M103
 };
+
+const KO_ROUND_LABELS = {
+  r32: "Round of 32", r16: "Round of 16", qf: "Quarterfinal",
+  sf: "Semifinal", final: "Final", third: "Third place",
+};
+// Knockout matches as Live-Updates fixtures, linked to the bracket: team names
+// fill in as the bracket is filled; dates/times come from the official schedule.
+function knockoutFixtures() {
+  const b = state.bracket;
+  if (!b) return [];
+  const out = [];
+  for (const round of ["r32", "r16", "qf", "sf", "final", "third"]) {
+    const sched = KNOCKOUT_SCHEDULE[round] || [];
+    const slots = b[round] || [];
+    sched.forEach((s, i) => {
+      const m = slots[i] || {};
+      out.push({
+        id: `ko-${round}-${i}`,
+        roundLabel: KO_ROUND_LABELS[round],
+        group: "",
+        teamA: m.a || "",
+        teamB: m.b || "",
+        date: s.date,
+        time: s.time,
+        status: "scheduled",
+        scoreA: 0, scoreB: 0, minute: "",
+        knockout: true,
+      });
+    });
+  }
+  return out;
+}
 
 // Three-letter weekday for a "YYYY-MM-DD" calendar date (timezone-safe).
 function weekdayOf(iso) {

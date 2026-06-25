@@ -179,6 +179,7 @@ html, body {
 .team { display: flex; flex-direction: column; gap: 4px; min-width: 0; align-items: flex-start; }
 .team.away { align-items: flex-end; text-align: right; }
 .team-name { font-size: 17px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.team-name.tbd { color: var(--muted); font-weight: 600; }
 .team-owner {
   font-size: 11px;
   color: var(--muted);
