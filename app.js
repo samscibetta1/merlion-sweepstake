@@ -649,6 +649,30 @@ function kMatch(round, i, m, editable, teamOptions) {
   return `<div class="kmatch">${whenHtml}${slotHtml("a")}${slotHtml("b")}</div>`;
 }
 
+// Order each bracket round so earlier-kickoff matches sit higher, WITHOUT breaking
+// the tree: we only ever swap a node's two child subtrees (purely vertical), so who
+// plays whom is unchanged. Returns display-order index arrays per round.
+function knockoutDisplayOrder() {
+  const timeKey = (round, i) => {
+    const s = (KNOCKOUT_SCHEDULE[round] || [])[i] || {};
+    return (s.date || "9999-99-99") + " " + (s.time || "99:99");
+  };
+  const childRoundOf = { r16: "r32", qf: "r16", sf: "qf", final: "sf" };
+  function build(round, i) {
+    const cr = childRoundOf[round];
+    if (!cr) return { round, i, min: timeKey(round, i), children: null };
+    const c0 = build(cr, 2 * i), c1 = build(cr, 2 * i + 1);
+    const children = c0.min <= c1.min ? [c0, c1] : [c1, c0];
+    return { round, i, min: children[0].min, children };
+  }
+  const order = { r32: [], r16: [], qf: [], sf: [], final: [] };
+  (function inorder(n) {
+    if (n.children) { inorder(n.children[0]); order[n.round].push(n.i); inorder(n.children[1]); }
+    else order[n.round].push(n.i);
+  })(build("final", 0));
+  return order;
+}
+
 function renderKnockout() {
   const el = document.getElementById("knockoutBracket");
   if (!el) return;
@@ -662,13 +686,19 @@ function renderKnockout() {
     ["Semifinals", "sf"],
     ["Final", "final"],
   ];
-  const cols = rounds.map(([label, key]) => `
+  // Keep the bracket tree intact but orient earlier games toward the top: at each
+  // branch, the side whose soonest match kicks off first is placed above the other.
+  const displayOrder = knockoutDisplayOrder();
+  const cols = rounds.map(([label, key]) => {
+    const idxs = displayOrder[key] || b[key].map((_, i) => i);
+    return `
     <div class="bracket-col bracket-col-${key}">
       <div class="bracket-round">${label}</div>
       <div class="bracket-matches">
-        ${b[key].map((m, i) => kMatch(key, i, m, editable, teamOptions)).join("")}
+        ${idxs.map((i) => kMatch(key, i, b[key][i], editable, teamOptions)).join("")}
       </div>
-    </div>`).join("");
+    </div>`;
+  }).join("");
   const champ = winnerTeam(b.final[0]);
   const champHtml = `<div class="champion ${champ ? "has" : ""}">🏆 ${champ ? esc(champ) : "Champion TBD"}</div>`;
   const thirdHtml = `
@@ -676,23 +706,7 @@ function renderKnockout() {
       <div class="bracket-round">Third place</div>
       ${kMatch("third", 0, b.third[0], editable, teamOptions)}
     </div>`;
-  // Teams already confirmed through to the knockouts (clinched in Group Round Ranking).
-  const byNorm = new Map(teamOptions.map((t) => [t.toLowerCase(), t]));
-  const clinched = Object.entries(state.teamStatus || {})
-    .filter(([, v]) => v === "clinched")
-    .map(([k]) => byNorm.get(k) || k)
-    .sort((a, b2) => a.localeCompare(b2));
-  const qualifiedHtml = clinched.length
-    ? `<div class="kq-summary">
-        <span class="kq-title">Through to the knockouts</span>
-        <div class="kq-list">${clinched.map((t) => {
-          const o = ownerOf(t);
-          return `<span class="kq-chip">✓ ${esc(t)}${o ? ` <span class="kq-owner">${esc(o)}</span>` : ""}</span>`;
-        }).join("")}</div>
-      </div>`
-    : "";
   el.innerHTML = `
-    ${qualifiedHtml}
     <div class="bracket-toolbar">
       <button id="bracketEditToggle" class="ghost-btn small" type="button">${editable ? "Done editing" : "Edit bracket"}</button>
       ${editable ? '<span class="bracket-hint">Choose Round of 32 teams, then tap a team to advance them.</span>' : ""}
