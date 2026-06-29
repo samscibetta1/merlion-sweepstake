@@ -185,6 +185,7 @@ function normalizeBracket(raw) {
       };
       if (typeof m.sA === "number") slot.sA = m.sA;
       if (typeof m.sB === "number") slot.sB = m.sB;
+      if (m.pens === true) slot.pens = true; // decided on penalties (scores level)
       return slot;
     });
   }
@@ -449,7 +450,8 @@ function renderMatches() {
 }
 
 function matchCard(m) {
-  const statusLabel = { live: "Live", scheduled: "Upcoming", final: "Full time" }[m.status];
+  let statusLabel = { live: "Live", scheduled: "Upcoming", final: "Full time" }[m.status];
+  if (m.knockout && m.pens && m.status === "final") statusLabel += " &middot; pens";
   const minute = m.status === "live" && m.minute ? ` &middot; ${esc(m.minute)}'` : "";
   const ownerA = m.teamA ? ownerOf(m.teamA) : null;
   const ownerB = m.teamB ? ownerOf(m.teamB) : null;
@@ -606,6 +608,7 @@ function knockoutFixtures() {
         scoreB: played ? m.sB : 0,
         minute: "",
         knockout: true,
+        pens: m.pens === true,
       });
     });
   }
@@ -632,7 +635,8 @@ function kMatch(round, i, m, editable, teamOptions) {
     const winCls = isWin ? " kwin" : "";
     const owner = team ? ownerOf(team) : "";
     const ownerHtml = owner ? `<span class="kowner">${esc(owner)}</span>` : "";
-    const scoreHtml = (!editable && played) ? `<span class="kscore${winCls}">${s === "a" ? m.sA : m.sB}</span>` : "";
+    const pensMark = (m.pens && isWin) ? '<sup class="kpens">P</sup>' : "";
+    const scoreHtml = (!editable && played) ? `<span class="kscore${winCls}">${s === "a" ? m.sA : m.sB}${pensMark}</span>` : "";
     if (editable && round === "r32") {
       const opts = ['<option value=""></option>']
         .concat(teamOptions.map((t) => `<option value="${esc(t)}" ${t === team ? "selected" : ""}>${esc(t)}</option>`))
