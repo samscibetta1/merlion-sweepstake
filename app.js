@@ -178,11 +178,14 @@ function normalizeBracket(raw) {
     const src = Array.isArray(b[round]) ? b[round] : [];
     out[round] = Array.from({ length: n }, (_, i) => {
       const m = src[i] || {};
-      return {
+      const slot = {
         a: typeof m.a === "string" ? m.a : "",
         b: typeof m.b === "string" ? m.b : "",
         winner: m.winner === "a" || m.winner === "b" ? m.winner : null,
       };
+      if (typeof m.sA === "number") slot.sA = m.sA;
+      if (typeof m.sB === "number") slot.sB = m.sB;
+      return slot;
     });
   }
   return out;
@@ -589,6 +592,7 @@ function knockoutFixtures() {
     const slots = b[round] || [];
     sched.forEach((s, i) => {
       const m = slots[i] || {};
+      const played = typeof m.sA === "number" && typeof m.sB === "number";
       out.push({
         id: `ko-${round}-${i}`,
         roundLabel: KO_ROUND_LABELS[round],
@@ -597,8 +601,10 @@ function knockoutFixtures() {
         teamB: m.b || "",
         date: s.date,
         time: s.time,
-        status: "scheduled",
-        scoreA: 0, scoreB: 0, minute: "",
+        status: played ? "final" : "scheduled",
+        scoreA: played ? m.sA : 0,
+        scoreB: played ? m.sB : 0,
+        minute: "",
         knockout: true,
       });
     });
