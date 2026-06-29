@@ -438,6 +438,15 @@ html, body {
 .kowner { font-size: 10px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kteam-name { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kteam-name.kwin { color: var(--green); font-weight: 800; }
+.kscore {
+  flex-shrink: 0;
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.kscore.kwin { color: var(--green); font-weight: 800; }
 .kempty { color: var(--muted); }
 .kteam-btn {
   background: none;

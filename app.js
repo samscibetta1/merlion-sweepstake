@@ -625,12 +625,14 @@ function kMatch(round, i, m, editable, teamOptions) {
   const whenHtml = sched
     ? `<div class="kmatch-when">${weekdayOf(sched.date)}, ${fmtDate(sched.date)} &middot; ${fmt12(sched.time)}</div>`
     : "";
+  const played = typeof m.sA === "number" && typeof m.sB === "number";
   const slotHtml = (s) => {
     const team = m[s];
     const isWin = m.winner === s;
     const winCls = isWin ? " kwin" : "";
     const owner = team ? ownerOf(team) : "";
     const ownerHtml = owner ? `<span class="kowner">${esc(owner)}</span>` : "";
+    const scoreHtml = (!editable && played) ? `<span class="kscore${winCls}">${s === "a" ? m.sA : m.sB}</span>` : "";
     if (editable && round === "r32") {
       const opts = ['<option value=""></option>']
         .concat(teamOptions.map((t) => `<option value="${esc(t)}" ${t === team ? "selected" : ""}>${esc(t)}</option>`))
@@ -650,7 +652,7 @@ function kMatch(round, i, m, editable, teamOptions) {
     const nameHtml = editable && team
       ? `<button class="kteam-btn${winCls}" data-act="kwin" data-round="${round}" data-mi="${i}" data-slot="${s}">${label}</button>`
       : `<span class="kteam-name${winCls}">${label}</span>`;
-    return `<div class="kslot${winCls}"><span class="kteam-wrap">${nameHtml}${ownerHtml}</span></div>`;
+    return `<div class="kslot${winCls}"><span class="kteam-wrap">${nameHtml}${ownerHtml}</span>${scoreHtml}</div>`;
   };
   return `<div class="kmatch">${whenHtml}${slotHtml("a")}${slotHtml("b")}</div>`;
 }
