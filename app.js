@@ -685,6 +685,14 @@ function knockoutDisplayOrder() {
   return order;
 }
 
+// Pin the knockout round-header bar just below the sticky top bar. The top bar's
+// height changes with viewport width (tabs wrap), so keep this in sync on resize.
+function updateKoHeadTop() {
+  const topbar = document.querySelector(".topbar");
+  if (topbar) document.documentElement.style.setProperty("--ko-head-top", topbar.offsetHeight + "px");
+}
+window.addEventListener("resize", updateKoHeadTop);
+
 function renderKnockout() {
   const el = document.getElementById("knockoutBracket");
   if (!el) return;
@@ -705,12 +713,16 @@ function renderKnockout() {
     const idxs = displayOrder[key] || b[key].map((_, i) => i);
     return `
     <div class="bracket-col bracket-col-${key}">
-      <div class="bracket-round">${label}</div>
       <div class="bracket-matches">
         ${idxs.map((i) => kMatch(key, i, b[key][i], editable, teamOptions)).join("")}
       </div>
     </div>`;
   }).join("");
+  // Round headers live in a sticky bar that stays pinned to the top while scrolling
+  // and slides horizontally in sync with the bracket (see scroll handler below).
+  const headsHtml = `<div class="bracket-heads"><div class="bracket-heads-track">${
+    rounds.map(([label]) => `<div class="bracket-head-cell">${label}</div>`).join("")
+  }</div></div>`;
   const champ = winnerTeam(b.final[0]);
   const champHtml = `<div class="champion ${champ ? "has" : ""}">🏆 ${champ ? esc(champ) : "Champion TBD"}</div>`;
   const thirdHtml = `
@@ -724,8 +736,21 @@ function renderKnockout() {
       ${editable ? '<span class="bracket-hint">Choose Round of 32 teams, then tap a team to advance them.</span>' : ""}
     </div>
     ${champHtml}
+    ${headsHtml}
     <div class="bracket-scroll"><div class="bracket">${cols}</div></div>
     ${thirdHtml}`;
+
+  // Pin the header bar just below the sticky top bar, and keep it horizontally
+  // aligned with the bracket as it scrolls sideways.
+  updateKoHeadTop();
+  requestAnimationFrame(updateKoHeadTop);
+  const scroller = el.querySelector(".bracket-scroll");
+  const headsTrack = el.querySelector(".bracket-heads-track");
+  if (scroller && headsTrack) {
+    const sync = () => { headsTrack.style.transform = `translateX(${-scroller.scrollLeft}px)`; };
+    scroller.addEventListener("scroll", sync, { passive: true });
+    sync();
+  }
 }
 
 function renderFeed() {
