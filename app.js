@@ -623,7 +623,7 @@ function weekdayOf(iso) {
   return days[new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay()];
 }
 
-function kMatch(round, i, m, editable, teamOptions) {
+function kMatch(round, i, m, editable, teamOptions, flip) {
   const sched = (KNOCKOUT_SCHEDULE[round] || [])[i];
   const whenHtml = sched
     ? `<div class="kmatch-when">${weekdayOf(sched.date)}, ${fmtDate(sched.date)} &middot; ${fmt12(sched.time)}</div>`
@@ -658,7 +658,9 @@ function kMatch(round, i, m, editable, teamOptions) {
       : `<span class="kteam-name${winCls}">${label}</span>`;
     return `<div class="kslot${winCls}"><span class="kteam-wrap">${nameHtml}${ownerHtml}</span>${scoreHtml}</div>`;
   };
-  return `<div class="kmatch">${whenHtml}${slotHtml("a")}${slotHtml("b")}</div>`;
+  const first = flip ? "b" : "a";
+  const second = flip ? "a" : "b";
+  return `<div class="kmatch">${whenHtml}${slotHtml(first)}${slotHtml(second)}</div>`;
 }
 
 // Order each bracket round so earlier-kickoff matches sit higher, WITHOUT breaking
@@ -670,14 +672,19 @@ function knockoutDisplayOrder() {
     return (s.date || "9999-99-99") + " " + (s.time || "99:99");
   };
   const childRoundOf = { r16: "r32", qf: "r16", sf: "qf", final: "sf" };
+  // flip[round][i] = true means this match's two feeders were swapped for display,
+  // so its card should show the "b" side on top to line up with the branch above it.
+  const flip = { r16: {}, qf: {}, sf: {}, final: {} };
   function build(round, i) {
     const cr = childRoundOf[round];
     if (!cr) return { round, i, min: timeKey(round, i), children: null };
     const c0 = build(cr, 2 * i), c1 = build(cr, 2 * i + 1);
-    const children = c0.min <= c1.min ? [c0, c1] : [c1, c0];
+    const swapped = c1.min < c0.min;
+    flip[round][i] = swapped;
+    const children = swapped ? [c1, c0] : [c0, c1];
     return { round, i, min: children[0].min, children };
   }
-  const order = { r32: [], r16: [], qf: [], sf: [], final: [] };
+  const order = { r32: [], r16: [], qf: [], sf: [], final: [], flip };
   (function inorder(n) {
     if (n.children) { inorder(n.children[0]); order[n.round].push(n.i); inorder(n.children[1]); }
     else order[n.round].push(n.i);
@@ -714,7 +721,7 @@ function renderKnockout() {
     return `
     <div class="bracket-col bracket-col-${key}">
       <div class="bracket-matches">
-        ${idxs.map((i) => kMatch(key, i, b[key][i], editable, teamOptions)).join("")}
+        ${idxs.map((i) => kMatch(key, i, b[key][i], editable, teamOptions, displayOrder.flip[key] && displayOrder.flip[key][i])).join("")}
       </div>
     </div>`;
   }).join("");
